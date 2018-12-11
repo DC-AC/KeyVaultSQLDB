@@ -1,0 +1,8 @@
+#Local Password for Script Testing
+$password = (get-AzureKeyVaultSecret -vaultName "Vault" -name "sqldbpw").SecretValueText
+
+
+New-AzureRMSQLServer -ResourceGroupName $RGName -ServerName $ServerName -Location $Region -ErrorAction Stop`
+ -Tags @{Environment="Env";Client=$ClientName} `
+ -SqlAdministratorCredentials $(New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $adminlogin, $(ConvertTo-SecureString -String $password -AsPlainText -Force)) 
+}
